@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from 'axios'
 
 function TransactionDashboard() {
     const [categories, setCategories] = useState([]);
@@ -86,8 +86,8 @@ function TransactionDashboard() {
                 >
                     <option value="">All Categories</option>
                     {categories.map(category => (
-                        <option key={category.id} value={category.id}>
-                            {category.name}
+                        <option key={category.category_id} value={category.category_id}>
+                            {category.category_name}
                         </option>
                     ))}
                 </select>
@@ -122,16 +122,16 @@ function TransactionDashboard() {
                 <table className="w-full border">
                     <thead>
                         <tr className="bg-gray-200">
-                            <th className="p-2 border">ID</th>
-                            <th className="p-2 border">Name</th>
+                            <th className="p-2 border">Product ID</th>
+                            <th className="p-2 border">Title</th>
                             <th className="p-2 border">Category</th>
                         </tr>
                     </thead>
                     <tbody>
                         {products.map(product => (
-                            <tr key={product.id}>
-                                <td className="p-2 border">{product.id}</td>
-                                <td className="p-2 border">{product.name}</td>
+                            <tr key={product.product_id}>
+                                <td className="p-2 border">{product.product_id}</td>
+                                <td className="p-2 border">{product.title}</td>
                                 <td className="p-2 border">{product.category_id}</td>
                             </tr>
                         ))}
@@ -145,21 +145,21 @@ function TransactionDashboard() {
                 <table className="w-full border">
                     <thead>
                         <tr className="bg-gray-200">
-                            <th className="p-2 border">ID</th>
-                            <th className="p-2 border">Product</th>
-                            <th className="p-2 border">Quantity</th>
-                            <th className="p-2 border">Total Amount</th>
+                            <th className="p-2 border">Transaction ID</th>
+                            <th className="p-2 border">Product Name</th>
+                            <th className="p-2 border">Store</th>
+                            <th className="p-2 border">Sales Amount</th>
                             <th className="p-2 border">Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         {transactions.map(transaction => (
-                            <tr key={transaction.id}>
-                                <td className="p-2 border">{transaction.id}</td>
+                            <tr key={transaction.txid}>
+                                <td className="p-2 border">{transaction.txid}</td>
                                 <td className="p-2 border">{transaction.product_name}</td>
-                                <td className="p-2 border">{transaction.quantity}</td>
-                                <td className="p-2 border">{transaction.total_amount}</td>
-                                <td className="p-2 border">{transaction.transaction_date}</td>
+                                <td className="p-2 border">{transaction.store}</td>
+                                <td className="p-2 border">{transaction.sales_amount}</td>
+                                <td className="p-2 border">{new Date(transaction.order_date).toLocaleString()}</td>
                             </tr>
                         ))}
                     </tbody>

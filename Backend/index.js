@@ -11,29 +11,26 @@ const dbConfig = {
     host: 'localhost',
     user: 'root',
     password: 'akash@123',
-    database: 'Scandid_Assignment'  // Same as the Java connection
+    database: 'Scandid_Assignment'  
 };
 
-
-// Database Connection Pool
 const pool = mysql.createPool(dbConfig);
 
-// Categories Endpoint
+// ✅ Categories Endpoint
 app.get('/api/categories', async (req, res) => {
     try {
-        const [categories] = await pool.query('SELECT * FROM category');
-        console.log("datafetch from backend"+categories)
+        const [categories] = await pool.query('SELECT * FROM categories');  // ✅ Fix table name
         res.json(categories);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-// Products Endpoint
+// ✅ Products Endpoint
 app.get('/api/products', async (req, res) => {
     try {
         const { categoryId } = req.query;
-        let query = 'SELECT * FROM product';
+        let query = 'SELECT * FROM products';  // ✅ Fix table name
         let params = [];
 
         if (categoryId) {
@@ -48,33 +45,33 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-// Transactions Endpoint
+// ✅ Transactions Endpoint (Fixing JOIN Issues)
 app.get('/api/transactions', async (req, res) => {
     try {
         const { categoryId, startDate, endDate } = req.query;
         
         let query = `
-            SELECT t.*, p.name as product_name, c.name as category_name 
+            SELECT t.*, p.title AS product_name, c.category_name AS category_name 
             FROM transactions t
-            JOIN product p ON t.product_id = p.id
-            JOIN category c ON p.category_id = c.id
+            JOIN products p ON t.product_id = p.product_id
+            JOIN categories c ON p.category_id = c.category_id
             WHERE 1=1
         `;
         
         const params = [];
 
         if (categoryId) {
-            query += ' AND c.id = ?';
+            query += ' AND c.category_id = ?';
             params.push(categoryId);
         }
 
         if (startDate) {
-            query += ' AND t.transaction_date >= ?';
+            query += ' AND t.order_date >= ?';
             params.push(startDate);
         }
 
         if (endDate) {
-            query += ' AND t.transaction_date <= ?';
+            query += ' AND t.order_date <= ?';
             params.push(endDate);
         }
 
